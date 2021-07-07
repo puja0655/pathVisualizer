@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Node from "./Node/Node";
 import { dijkstra, getNodesInShortestPathOrder } from "../algorithms/dijkstra";
-import {bellman} from '../algorithms/bellmanFord'
+import { bellman } from "../algorithms/bellmanFord";
 import { Button } from "reactstrap";
 
 import "./PathfindingVisualizer.css";
@@ -18,6 +18,7 @@ export default class PathfindingVisualizer extends Component {
     this.state = {
       grid: [],
       mouseIsPressed: false,
+      text: "choose starting point",
     };
   }
 
@@ -32,10 +33,12 @@ export default class PathfindingVisualizer extends Component {
       newGrid = getNewGridWithStart(this.state.grid, row, col);
       START_NODE_ROW = row;
       START_NODE_COL = col;
+      this.setState({ text: "choose ending point" });
     } else if (x === 1) {
       newGrid = getNewGridWithFinish(this.state.grid, row, col);
       FINISH_NODE_ROW = row;
       FINISH_NODE_COL = col;
+      this.setState({ text: "Build wall by clicking on cells" });
     } else {
       newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     }
@@ -119,10 +122,9 @@ export default class PathfindingVisualizer extends Component {
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
-  
   render() {
     const { grid, mouseIsPressed } = this.state;
-     
+
     return (
       <>
         <br />
@@ -131,12 +133,13 @@ export default class PathfindingVisualizer extends Component {
         <Button onClick={() => this.visualizeDijkstra()} color="secondary">
           Visualize Dijkstra's Algorithm
         </Button>
-        <Button onClick={()=>this.visualizeBellman()} color="primary">
+        {/* <Button onClick={()=>this.visualizeBellman()} color="primary">
            Visualize Bellman Ford's Algorithm
-        </Button>
-        <div></div>
+        </Button> */}
+        <div className="m-1 alert alert-success">
+          <h5>{this.state.text}</h5>
+        </div>
         <div className="grid">
-          
           {grid.map((row, rowIdx) => {
             return (
               <div key={rowIdx}>
